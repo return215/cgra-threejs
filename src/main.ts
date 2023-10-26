@@ -1,4 +1,4 @@
-import { AmbientLight, BoxGeometry, DirectionalLight, Mesh, MeshBasicMaterial, MeshPhongMaterial, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { AmbientLight, BoxGeometry, DirectionalLight, Mesh, MeshPhongMaterial, PerspectiveCamera, Scene, WebGLRenderer } from "three";
 import { resizeCanvasToDisplaySize } from "twgl.js"
 
 export const showDecimalPoints = (n: number, d: number = 2) => ((Math.round(n * 10**(d)) / 10**(d)).toFixed(d));
@@ -8,7 +8,8 @@ const scene = new Scene();
 const camera = new PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.001, 1000);
 
 // Create a renderer
-const app = document.querySelector<HTMLDivElement>("#mainCanvas")!;
+// @ts-ignore unused, may be used later, idk
+const app = document.querySelector<HTMLDivElement>("#app")!;
 const mainCanvas = document.querySelector<HTMLCanvasElement>("#mainCanvas")!;
 resizeCanvasToDisplaySize(mainCanvas);
 const timeScaleElem = document.querySelector<HTMLParagraphElement>("#timeScale");
