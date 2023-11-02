@@ -1,4 +1,5 @@
 import { AmbientLight, BoxGeometry, DirectionalLight, Mesh, MeshPhongMaterial, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+// @ts-ignore unused, may be used later, idk
 import { resizeCanvasToDisplaySize } from "twgl.js"
 
 function resizeRendererToDisplaySize( renderer: WebGLRenderer ) {
