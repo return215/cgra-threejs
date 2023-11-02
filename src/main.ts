@@ -1,22 +1,36 @@
 import { AmbientLight, BoxGeometry, DirectionalLight, Mesh, MeshPhongMaterial, PerspectiveCamera, Scene, WebGLRenderer } from "three";
 import { resizeCanvasToDisplaySize } from "twgl.js"
 
+function resizeRendererToDisplaySize( renderer: WebGLRenderer ) {
+  const canvas = renderer.domElement;
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+  const needResize = canvas.width !== width || canvas.height !== height;
+  if (needResize) {
+    renderer.setSize(width, height, false);
+  }
+  return needResize;
+}
+
 export const showDecimalPoints = (n: number, d: number = 2) => ((Math.round(n * 10**(d)) / 10**(d)).toFixed(d));
 
-const scene = new Scene();
-
-const camera = new PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.001, 1000);
-
-// Create a renderer
+// Create a renderer from the canvas
 // @ts-ignore unused, may be used later, idk
 const app = document.querySelector<HTMLDivElement>("#app")!;
 const mainCanvas = document.querySelector<HTMLCanvasElement>("#mainCanvas")!;
-resizeCanvasToDisplaySize(mainCanvas);
 const timeScaleElem = document.querySelector<HTMLParagraphElement>("#timeScale");
 const renderer = new WebGLRenderer({canvas: mainCanvas});
+const canvasAspectRatio = (c:HTMLCanvasElement) => c.clientWidth / c.clientHeight;
+
+// Create a scene
+const scene = new Scene();
+
+// Create a camera
+const camera = new PerspectiveCamera(70, canvasAspectRatio(mainCanvas), 0.001, 1000);
 
 // Create a cube
 const cubeGeometry = new BoxGeometry(1, 1, 1);
+cubeGeometry.translate(0.0, 0.0, 0.0);
 const cubeMaterial = new MeshPhongMaterial({color: 0xff8800});
 const cube = new Mesh(cubeGeometry, cubeMaterial);
 scene.add(cube);
@@ -62,6 +76,13 @@ function animate() {
     timeScale *= 99 / 100;
   else
     timeScale *= 100 / 99;
+
+  // resize canvas
+  if (resizeRendererToDisplaySize(renderer)) {
+    // change camera aspect ratio if canvas changed size
+    camera.aspect = canvasAspectRatio(mainCanvas);
+    camera.updateProjectionMatrix();
+  }
 
   cube.rotation.x += 0.01 * timeScale;
   cube.rotation.y += 0.01 * timeScale;
